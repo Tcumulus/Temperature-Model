@@ -1,10 +1,10 @@
 import pandas as pd
 import numpy as np
-from sklearn import linear_model
-from sklearn.linear_model import LinearRegression
+from sklearn.tree import DecisionTreeClassifier 
 from sklearn.model_selection import train_test_split 
 import sklearn
 import pickle
+
 
 month = int(input("Month: "))
 hour = int(input("Hour: "))
@@ -19,12 +19,17 @@ x = np.array(x, dtype=float)
 y = np.array(y, dtype=float)
 
 x_train, x_test, y_train, y_test = sklearn.model_selection.train_test_split(x, y, test_size = 0.1) # Train and test data chunks
-linear = linear_model.LinearRegression()
-linear = linear.fit(x_train, y_train)
-y_pred = linear.predict(x_test)
+tree = DecisionTreeClassifier()
+tree = tree.fit(x_train, y_train)
+y_pred = tree.predict(x_test)
 
-accuracy = linear.score(x_test, y_test)
+accuracy = tree.score(x_test, y_test)
 print(accuracy)
 
-predictions = linear.predict([[0, 0, 0]])
+predictions = tree.predict([[0,100,8]])
 print(predictions)
+
+#predictions = tree.predict(x_test)
+
+#for x in range(len(predictions)):
+#    print(predictions[x], y_test[x])
