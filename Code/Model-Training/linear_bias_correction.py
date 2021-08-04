@@ -34,8 +34,8 @@ def b_loop():
 
 # input
 month, hour = int(input("Month: ")), int(input("Hour: "))
-current_temperature = int(input("Temperature (°C): "))
-current_wind_speed = int(input("Wind speed (km/h): ")) * 0.36 # convert to 0.1m/s
+current_temperature = float(input("Temperature (°C): "))
+current_wind_speed = float(input("Wind speed (km/h): ")) * 0.36 # convert to 0.1m/s
 current_wind_dir = int(input("Wind direction (°): "))
 current_cloud_cover = int(input("Cloud cover (0-8): "))
 gas = 10
