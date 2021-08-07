@@ -1,5 +1,7 @@
+import random as rd
 import pandas as pd
 import numpy as np
+from scipy.sparse.construct import random
 import sklearn
 from sklearn import linear_model
 from sklearn.linear_model import LinearRegression
@@ -34,10 +36,11 @@ def b_loop():
 
 # input
 month, hour = int(input("Month: ")), int(input("Hour: "))
-current_temperature = float(input("Temperature (°C): "))
+current_temperature = float(input("Temperature (°C): ")) * 10
 current_wind_speed = float(input("Wind speed (km/h): ")) * 0.36 # convert to 0.1m/s
 current_wind_dir = int(input("Wind direction (°): "))
 current_cloud_cover = int(input("Cloud cover (0-8): "))
+members = int(input("Members (#): "))
 gas = 10
 
 # import
@@ -53,9 +56,30 @@ y = np.array(y, dtype=float)
 
 # general loop
 [b_loop() for _ in range(gas)]
-avg_b = (sum(best_l) / len(best_l)) / 10
+avg_b = (sum(best_l) / len(best_l))
 
 # prediction and output
-temp_prediction = float(linear.predict([[current_wind_dir, current_wind_speed, current_cloud_cover]])) * avg_b
-temp_prediction += current_temperature
-print(f"{hour+1}h: {round(temp_prediction, 1)}°C")
+temp_prediction = []
+def run():
+    global temp_prediction, current_wind_dir, current_wind_speed, current_cloud_cover, current_temperature
+    temp_prediction.append(float((linear.predict([[current_wind_dir, current_wind_speed, current_cloud_cover]])) * avg_b + current_temperature) / 10)
+
+# oper
+run()
+o_wind_dir, o_wind_speed, o_cloud_cover, o_b = current_wind_dir, current_wind_speed, current_cloud_cover, avg_b
+
+# members
+for _ in range(members):
+    current_wind_dir = o_wind_dir + rd.randint(-72, 72)
+    current_wind_speed = o_wind_speed + rd.randint(-50, 50) 
+    current_cloud_cover = o_cloud_cover + rd.randint(-2, 2)
+    avg_b = o_b + rd.uniform(-0.25, 0.25)
+    if current_wind_dir < 0: current_wind_dir = 0
+    if current_wind_speed < 0: current_wind_speed = 0
+    if current_cloud_cover < 0: current_cloud_cover = 0
+    elif current_cloud_cover > 8: current_cloud_cover = 8
+    run()
+
+avg_temp_prediction = sum(temp_prediction) / len(temp_prediction)
+print(temp_prediction)
+print(f"{hour+1}h: {round(avg_temp_prediction, 1)}°C")
