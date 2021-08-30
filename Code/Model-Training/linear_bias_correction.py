@@ -131,6 +131,7 @@ np.delete(temp_prediction, [0], axis=1)
 [plt.plot(h, column, "#c7c5bf") for column in temp_prediction.T]
 plt.plot(h, oper, "k", label = "P0")
 plt.plot(h, avg_temp_prediction, "r", label = "avg")
+plt.xticks(h)
 plt.legend()
 plt.xlabel("Time (h UTC+2)")
 plt.ylabel("Temperature (°C)")
